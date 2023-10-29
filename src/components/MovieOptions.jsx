@@ -5,18 +5,29 @@ import db from "../assets/db.json";
 
 const MovieOptions = ({ isDialogOpen, setIsDialogOpen, onSelectMovie }) => {
     const [value, setValue] = useState("");
+    const [inputValue, setInputValue] = useState("");
 
     const handleModalClose = () => {
         setIsDialogOpen(false);
         setValue("");
+        setInputValue("");
     };
 
     const handleMovieSelect = (movie) => {
         onSelectMovie(movie);
-        setValue(movie);
+        // setValue(movie);
 
         setIsDialogOpen(false);
         setValue("");
+        setInputValue("");
+    };
+
+    const handleInputChange = (event, newValue) => {
+        if (newValue?.trim() === "") {
+            setInputValue(null);
+        } else {
+            setInputValue(newValue);
+        }
     };
 
     return (
@@ -31,9 +42,13 @@ const MovieOptions = ({ isDialogOpen, setIsDialogOpen, onSelectMovie }) => {
                     freeSolo
                     options={db}
                     value={value}
+                    open={inputValue !== ""}
                     className="h-full"
                     onChange={(event, newValue) => {
                         handleMovieSelect(newValue);
+                    }}
+                    onInputChange={(event, newValue) => {
+                        handleInputChange(newValue);
                     }}
                     renderInput={(params) => (
                         <TextField {...params} label="Movie" />
